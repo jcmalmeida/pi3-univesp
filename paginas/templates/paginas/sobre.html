@@ -1,0 +1,41 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+
+{% block conteudo %}
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                Sobre
+              </h2>
+            </div>
+            <p>
+
+O POEV é um portal de oportunidades de estágio para alunos da Univesp.  Os
+alunos do Eixo da Computação desenvolveram este portal como parte do Projeto
+Integrador da Univesp usando o DJANGO framework.  Por favor nos ajude a
+comunicar oportunidades em Vinhedo e Região para todos os alunos da Univesp
+incluindo os cursos dos Eixos de Licenciatura e Negócios, além do Eixo da
+Computação.  Qualquer dúvida, entre em contato!
+            </p>
+            <a href="{% url 'contato' %}">
+              Contato
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+
+
+
+
+

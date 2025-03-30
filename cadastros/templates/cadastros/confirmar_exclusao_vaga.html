@@ -1,0 +1,14 @@
+
+{% block content %}
+<div class="container">
+    <h2>Confirmar exclusão da vaga</h2>
+    <p>Tem certeza que deseja excluir a vaga <strong>{{ vaga.nome }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sim, excluir</button>
+        <a href="{% url 'minhas_vagas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+

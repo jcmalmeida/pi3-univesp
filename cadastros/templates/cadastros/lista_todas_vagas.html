@@ -1,0 +1,56 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<style>
+.btn-block {
+    width: 100%;
+    background-color: #A82537; /* Amarelo do WRI Brasil */
+    color: #F5F5F5; /* Cinza claro */
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.btn-block:hover {
+    background-color: #333333; /* Cinza escuro no hover */
+    color: white;
+}
+
+</style>
+<section class="about_section layout_padding">
+    <div class="container">
+        <h2 class="mb-4">Vagas Abertas</h2>
+        <div class="row">
+            {% for vaga in vagas %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Nome da vaga com link para a página de detalhes -->
+                            <h5 class="card-title">
+                                <a href="{% url 'vaga_detail' vaga.pk %}" class="text-decoration-none">{{ vaga.nome }}</a>
+                            </h5>
+                            
+                            <!-- Nome da empresa -->
+                            <p class="card-text text-muted">{{ vaga.empresa.nome }}</p>
+                            
+                            <!-- Botão para ver detalhes da vaga, com estilo personalizado -->
+                            <div class="mt-auto">
+                                <a href="{% url 'vaga_detail' vaga.pk %}" class="btn btn-block">Ver Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <p class="text-center">Ainda não há vagas disponíveis.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

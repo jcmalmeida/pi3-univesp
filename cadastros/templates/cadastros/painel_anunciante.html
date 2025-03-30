@@ -1,0 +1,49 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+        {% block conteudo %}
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+<div class="container">
+<h2>Vagas Criadas por Você</h2>
+
+<table class="features-table">
+    <thead>
+        <tr>
+            <th>Nome da Vaga</th>
+            <th>Empresa</th>
+            <th>Descrição</th>
+            <th>Ativa</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vaga in vagas %}
+            <tr>
+                <td>{{ vaga.nome }}</td>
+                <td>{{ vaga.empresa.nome }}</td>
+                <td>{{ vaga.descricao }}</td>
+                <td>{{ vaga.inativa|yesno:"Não,Sim" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">Você ainda não criou nenhuma vaga.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+
+      </div>
+    </div>
+  </section>
+        {% endblock %}
+
+
+
+
+
+
+

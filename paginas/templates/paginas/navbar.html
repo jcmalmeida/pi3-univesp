@@ -1,0 +1,119 @@
+{% load static %}
+<style>
+.dropdown-menu {
+    transform: translateY(10px); /* Ajusta a posição vertical do dropdown */
+    right: 0; /* Alinha o dropdown à direita */
+    left: auto;
+}
+</style>
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+
+          <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'images/poev.png' %}" alt="poev" width="50" height="50" class="d-inline-block align-middle" style="vertical-align: middle; margin-right: 0px; padding-right:0px">
+            <span>
+            POEV.COM.BR
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  ml-auto">
+              <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'homepage' %}">Início</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'sobre' %}">Sobre</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'contato' %}">Contato</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'todas_vagas' %}">Vagas</a>
+              </li>
+
+
+
+{% if request.user.is_authenticated %}
+{% if user_type == 'aluno' %}
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   &nbsp;&nbsp;&nbsp;&nbsp;{{ request.user }}!
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="{% url 'atualizar_perfil_aluno' %}"#1>Meu dados</a>
+    <a class="dropdown-item" href="{% url 'password_change' %}"#1></i>Alterar senha</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'logout' %}"></i>Sair</a>
+  </div>
+</li>
+{% elif user_type == 'anunciante' %}
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   &nbsp;&nbsp;&nbsp;&nbsp;{{ request.user }}!
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="{% url 'atualizar_perfil_empresa' %}"#1>Meu dados</a>
+    <a class="dropdown-item" href="{% url 'password_change' %}"#1></i>Alterar senha</a>
+    <a class="dropdown-item" href="{% url 'todas_vagas' %}"#1></i>Vagas Abertas</a>
+    <a class="dropdown-item" href="{% url 'minhas_vagas' %}"#1></i>Minhas Vagas</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'criar_vaga' %}"#1></i>Criar Vaga</a>
+    <a class="dropdown-item" href="{% url 'criar_empresa' %}"#1></i>Criar Empresa</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'listar_empresas' %}"#1></i>Ver Empresas</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'logout' %}"></i>Sair</a>
+  </div>
+</li>
+{% elif user.is_superuser %}
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   &nbsp;&nbsp;&nbsp;&nbsp;{{ request.user }}!
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="{% url 'atualizar_perfil_empresa' %}"#1>Meu dados</a>
+    <a class="dropdown-item" href="{% url 'password_change' %}"#1></i>Alterar senha</a>
+    <a class="dropdown-item" href="{% url 'todas_vagas' %}"#1></i>Vagas Abertas</a>
+    <a class="dropdown-item" href="{% url 'minhas_vagas' %}"#1></i>Minhas Vagas</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'criar_vaga' %}"#1></i>Criar Vaga</a>
+    <a class="dropdown-item" href="{% url 'criar_empresa' %}"#1></i>Criar Empresa</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'listar_empresas' %}"#1></i>Ver Empresas</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'logout' %}"></i>Sair</a>
+  </div>
+</li>
+{% endif %}
+{% else %}
+
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}"#1>
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  <span>
+                    Entrar
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'registrar' %}"#1>
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  <span>
+                    Registrar
+                  </span>
+                </a>
+              </li>
+{% endif %}
+
+
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+

@@ -1,0 +1,60 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+        {% block conteudo %}
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+<div class="container">
+<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+<script src="{% static 'django_ckeditor_5/dist/ckeditor.js' %}"></script>
+<h2>Criar Nova Vaga</h2>
+{% load static %}
+        <!-- Formulário de Criação de Vaga -->
+        <form method="post" novalidate>
+            {% load crispy_forms_tags %}
+
+            {% csrf_token %}
+            <!-- Campo Nome da Vaga -->
+            <div class="form-group mb-3">
+                {{ form.nome|as_crispy_field }}
+            </div>
+    {{ form.media }}  <!-- Importante: Carrega o JS e CSS do CKEditor -->
+            <!-- Campo Descrição -->
+            <div class="form-group mb-3">
+                {{ form.descricao|as_crispy_field }}
+            </div>
+
+            <!-- Campo Empresa (Dropdown com empresas já cadastradas) -->
+            <div class="form-group mb-3">
+                {{ form.empresa|as_crispy_field }}
+            </div>
+
+            <!-- Campo Link da Vaga -->
+            <div class="form-group mb-3">
+                {{ form.link|as_crispy_field }}
+            </div>
+
+            <!-- Campo Vaga Inativa (Checkbox) -->
+            <div class="form-group mb-3">
+                {{ form.inativa|as_crispy_field }}
+            </div>
+
+            <div class="container" style="text-align: center">
+            <button type="submit" style="width: auto; padding: 8px 16px; display: inline-block; text-align:center"class="btn btn-primary btn-block">Salvar Vaga</button>
+            </div>
+
+            <!-- Botão de Enviar -->
+        </form>
+    </div>
+
+      </div>
+    </div>
+  </section>
+        {% endblock %}
+
+
+
+
+

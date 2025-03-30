@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% extends 'usuarios/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block conteudo %}
+    <div class="container">
+        <div class="login-box">
+            <img src="{% static 'images/poev.png' %}" alt="poev" width="80" height="80" class="d-inline-block align-middle">
+            <h1>Registrar | POEV</h1>
+            <h2>Candidato</h2>
+
+            <form method="post" action="">
+                {% csrf_token %}
+                  {{ form|crispy }}
+
+                <!-- Nome -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.nome }}
+                </div>
+
+                <!-- CPF
+                <div class="form-group mb-3">
+                    {{ aluno_form.cpf }}
+                </div>
+ -->
+                <!-- Telefone -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.telefone }}
+                </div>
+
+                <!-- Instituição -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.instituicao }}
+                </div>
+
+                <div class="form-group mb-3" style="display: none;">
+                    {{ aluno_form.outra_instituicao }}
+                </div>
+
+                <div class="form-group mb-3" style="display: none;">
+                    {{ aluno_form.curso }}
+                </div>
+
+                <div class="form-group mb-3" style="display: none;">
+                    {{ aluno_form.outro_curso }}
+                </div>
+
+                  <div class="form-group mb-3" style="display: none;">
+                    {{ aluno_form.is_formado }}  <!-- Checkbox -->
+                  </div>
+
+                <div class="form-group mb-3" style="display: none;">
+                    {{ aluno_form.semestre }}
+                </div>
+
+
+                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+            </form>
+
+            <a href="{% url 'login' %}" class="btn-link mt-3 d-block">Já possui cadastro?</a>
+        </div>
+    </div>
+
+<script>
+
+instituicao = document.getElementById('id_instituicao');
+curso = document.getElementById('id_curso').parentElement;
+
+outra_instituicao = document.getElementById('id_outra_instituicao').parentElement;
+outro_curso = document.getElementById('id_outro_curso').parentElement;
+
+situacao = document.getElementById('id_is_formado').parentElement;
+situacao_reset = document.getElementById('id_is_formado');
+
+semestre = document.getElementById('id_semestre').parentElement;
+semestre_reset = document.getElementById('id_semestre');
+
+instituicao.addEventListener('change', function() {
+var instituicaoSelecionada = this.value;
+if (instituicaoSelecionada === 'UNIVESP') {
+// mostrar
+curso.style.display = 'block';
+situacao.style.display = 'block';
+// desaparecer
+outra_instituicao.style.display = 'none';
+outro_curso.style.display = 'none';
+semestre.style.display = 'none';
+//  resetar
+situacao_reset.value = '';
+semestre_reset.value = '';
+}
+
+else if (instituicaoSelecionada === 'OUTRA') {
+// mostrar
+outra_instituicao.style.display = 'block';
+outro_curso.style.display = 'block';
+situacao.style.display = 'block';
+// desaparecer
+curso.style.display = 'none';
+semestre.style.display = 'none';
+//  resetar
+situacao_reset.value = '';
+semestre_reset.value = '';
+}
+
+else {
+// desaparecer
+curso.style.display = 'none';
+outra_instituicao.style.display = 'none';
+outro_curso.style.display = 'none';
+situacao.style.display = 'none';
+semestre.style.display = 'none';
+}
+});
+
+document.getElementById('id_is_formado').addEventListener('change', function() {
+var isFormadoChecked = this.value;
+if (isFormadoChecked === 'EM ANDAMENTO') {
+semestre.style.display = 'block';
+} else {
+semestre.style.display = 'none';
+}
+});
+
+</script>
+
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,55 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+        {% block conteudo %}
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <div class="card-body">
+            <!-- Nome da Vaga -->
+            <h1 class="card-title mb-4">{{ vaga.nome }}</h1>
+            
+            <!-- Empresa -->
+            <div class="mb-3">
+                <h5 class="text-muted">Empresa</h5>
+                <p class="h5">{{ vaga.empresa.nome }}</p>
+            </div>
+
+            <!-- Descrição -->
+            <div class="mb-3">
+                <h5 class="text-muted">Descrição</h5>
+                <p>{{ vaga.descricao|safe }}</p>
+            </div>
+
+            <!-- Link Externo -->
+            {% if vaga.link %}
+            <div class="mb-3">
+                <h5 class="text-muted">Mais informações</h5>
+                <a href="{{ vaga.link }}" target="_blank" class="btn btn-info">Visitar Página da Vaga</a>
+            </div>
+            {% endif %}
+
+            <!-- Botão para Voltar -->
+            <a href="{% url 'todas_vagas' %}" class="btn btn-primary mt-4">← Voltar para a Lista de Vagas</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+      </div>
+    </div>
+  </section>
+        {% endblock %}
+
+
+
+
+
+
+
+

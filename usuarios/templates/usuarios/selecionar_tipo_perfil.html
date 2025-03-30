@@ -1,0 +1,23 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+
+{% block conteudo %}
+    <div class="container">
+        <div class="login-box">
+            <img src="{% static 'images/poev.png' %}" alt="poev" width="80" height="80" class="d-inline-block align-middle" style="vertical-align: middle; margin-right: 0px; padding-right:0px">
+            <h1>Registrar | POEV</h1>
+            {% load crispy_forms_tags %}
+            <form method="post" action="">
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  <button type="submit" class="btn btn-primary btn-block">Continuar</button>
+            </form>
+            <a href="{% url 'login' %}" class="btn-link mt-3 d-block">Já possui cadastro?</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

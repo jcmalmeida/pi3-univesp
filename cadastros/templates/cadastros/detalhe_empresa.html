@@ -1,0 +1,27 @@
+<h2>Vagas Criadas por {{ empresa.nome }}</h2>
+
+<table class="features-table">
+    <thead>
+        <tr>
+            <th>Nome da Vaga</th>
+            <th>Descrição</th>
+            <th>Ativa</th>
+            <th>CEP</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vaga in vagas %}
+            <tr>
+                <td>{{ vaga.nome }}</td>
+                <td>{{ vaga.descricao }}</td>
+                <td>{{ vaga.inativa|yesno:"Não,Sim" }}</td>
+                <td>{{ vaga.cep }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">Esta empresa ainda não possui vagas cadastradas.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

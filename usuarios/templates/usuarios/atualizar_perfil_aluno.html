@@ -1,0 +1,120 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+
+{% block conteudo %}
+    <div class="container">
+        <div class="login-box">
+            <img src="{% static 'images/poev.png' %}" alt="poev" width="80" height="80" class="d-inline-block align-middle">
+            <h1>Registrar | POEV</h1>
+            {% load crispy_forms_tags %}
+            <form method="post" action="">
+                {% csrf_token %}
+                  {{ user_form|crispy }}
+                <!-- Nome -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.nome|as_crispy_field }}
+                </div>
+
+                <!-- Telefone -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.telefone|as_crispy_field  }}
+                </div>
+
+                <!-- Instituição -->
+                <div class="form-group mb-3">
+                    {{ aluno_form.instituicao|as_crispy_field  }}
+                </div>
+
+                <div class="form-group mb-3" id="outra_instituicao_field" style="display: none;">
+                    {{ aluno_form.outra_instituicao|as_crispy_field  }}
+                </div>
+
+                <div class="form-group mb-3" id="curso_field" style="display: none;">
+                    {{ aluno_form.curso|as_crispy_field  }}
+                </div>
+
+                <div class="form-group mb-3" id="outro_curso_field" style="display: none;">
+                    {{ aluno_form.outro_curso|as_crispy_field  }}
+                </div>
+
+                  <div class="form-group mb-3" id="is_formado_field" style="display: none;">
+                    {{ aluno_form.is_formado|as_crispy_field  }}  <!-- Checkbox -->
+                  </div>
+
+                <div class="form-group mb-3" id="semestre_field" style="display: none;">
+                    {{ aluno_form.semestre|as_crispy_field  }}
+                </div>
+
+
+                <button type="submit" class="btn btn-primary btn-block">Atualizar</button>
+            </form>
+
+        </div>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var instituicaoField = document.getElementById('id_instituicao');
+        var outraInstituicaoField = document.getElementById('outra_instituicao_field');
+        var cursoField = document.getElementById('curso_field');
+        var outroCursoField = document.getElementById('outro_curso_field');
+        var isFormadoField = document.getElementById('is_formado_field');  // Campo select de status de formação
+        var semestreField = document.getElementById('semestre_field');  // Campo de semestre
+
+        // Função para alternar exibição dos campos com base na instituição selecionada
+        function toggleFields() {
+            var instituicaoSelecionada = instituicaoField.value;
+
+            if (instituicaoSelecionada === 'UNIVESP') {
+                // Mostrar o campo de cursos da UNIVESP
+                cursoField.style.display = 'block';
+                isFormadoField.style.display = 'block';
+                outraInstituicaoField.style.display = 'none';
+                outroCursoField.style.display = 'none';
+            } else if (instituicaoSelecionada === 'OUTRA') {
+                // Mostrar o campo para digitar outra instituição e outro curso
+                outraInstituicaoField.style.display = 'block';
+                outroCursoField.style.display = 'block';
+                cursoField.style.display = 'none';
+                isFormadoField.style.display = 'block';  // Mostrar o campo de status de formação
+            } else {
+                // Caso a instituição seja outra, esconder todos os campos
+                outraInstituicaoField.style.display = 'none';
+                cursoField.style.display = 'none';
+                outroCursoField.style.display = 'none';
+                isFormadoField.style.display = 'none';
+            }
+        }
+
+        // Função para alternar exibição do campo semestre baseado no valor do campo is_formado
+        function toggleSemestreField() {
+        var isFormadoField = document.getElementById('id_is_formado');  // Campo select de status de formação
+            var isFormadoValue = isFormadoField.value;  // Obter o valor do campo
+
+            if (isFormadoValue === 'EM ANDAMENTO') {
+                semestreField.style.display = 'block';  // Mostrar semestre se for "EM ANDAMENTO"
+            } else {
+                semestreField.style.display = 'none';  // Esconder semestre para outros valores
+            }
+        }
+
+        // Chamar as funções ao carregar a página com base no valor atual
+        toggleFields();
+        toggleSemestreField();
+
+        // Atualizar os campos quando o usuário mudar a instituição
+        instituicaoField.addEventListener('change', toggleFields);
+
+        // Atualizar o campo de semestre quando o valor de is_formado mudar
+        isFormadoField.addEventListener('change', toggleSemestreField);
+    });
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+

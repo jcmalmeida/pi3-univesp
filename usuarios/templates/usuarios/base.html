@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>POEV</title>
+    {% include 'paginas/favicon.html' %}
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <!-- nice select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+<style>
+.login-box {
+    margin: 50px auto; /* Adiciona mais espaço acima e abaixo */
+    background-color: rgba(51, 51, 51, 0.9); /* Cinza escuro translúcido */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-box h1 {
+    font-family: 'Roboto', sans-serif; /* Mesma fonte do navbar */
+    font-weight: 700; /* Mesma espessura do texto */
+    color: white; /* Cor cinza escuro */
+    margin-bottom: 20px;
+    font-size: 24px; /* Tamanho adequado */
+}
+
+.login-box form {
+    margin-top: 20px;
+}
+
+.btn-block {
+    width: 100%;
+    background-color: #A82537; /* Amarelo do WRI Brasil */
+    color: #F5F5F5; /* Cinza escuro */
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-block:hover {
+    background-color: #333333; /* Cinza escuro no hover */
+    color: white;
+}
+
+a.btn-link {
+    color: #F5F5F5; /* Amarelo para o link de "Criar novo usuário" */
+}
+
+a.btn-link:hover {
+    color: #A82537; /* Branco ao passar o mouse */
+}
+
+.select {
+    width: 100%;
+    height: 38px;
+    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* blog section end */
+.info_section {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 65px 0 45px 0;
+}
+
+.info_section h4 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.info_section .info_links ul {
+  padding-left: 15px;
+}
+
+.info_section .info_links ul .active::before {
+  background-color: #e41a2b;
+}
+
+.info_section .info_links ul li {
+  list-style-type: none;
+  position: relative;
+}
+
+.info_section .info_links ul li::before {
+  content: "";
+  left: -15px;
+  top: 50%;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  -webkit-transform: translateY(-50%);
+     -moz-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+       -o-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.info_section .info_links ul li a {
+  color: #ffffff;
+}
+
+.info_section .info_links ul li:hover::before {
+  background-color: #e41a2b;
+}
+
+.info_section .info_form input {
+  width: 100%;
+  border: none;
+  height: 45px;
+  margin-bottom: 15px;
+  padding-left: 15px;
+  background-color: #eaeaea;
+  outline: none;
+  color: #101010;
+}
+
+.info_section .info_form button {
+  display: inline-block;
+  padding: 10px 45px;
+  background-color: #A82537;
+  color: #ffffff;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  -o-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  border: 1px solid #A82537;
+  outline: none;
+}
+
+.info_section .info_form button:hover {
+  background-color: transparent;
+  color: #e41a2b;
+}
+
+.info_section .info_social .social_container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.info_section .info_social .social_container a {
+  width: 30px;
+  height: 30px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #ffffff;
+  border-radius: 100%;
+  margin: 0 5px;
+  color: #1a1c78;
+  font-size: 16px;
+}
+
+.info_section .info_social .social_container a:hover {
+  color: #e41a2b;
+}
+
+/* footer section*/
+/* Footer */
+footer {
+    background-color: rgba(51, 51, 51, 0.9);
+    color: white;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+    bottom: 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    color: #F1C40F;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Força o footer a ficar na parte inferior da página */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-container {
+    margin-top: auto;
+    width: 100%;
+}
+
+
+.footer_section {
+  position: relative;
+  background-color: #333333;
+  text-align: center;
+}
+
+.footer_section p {
+  border-top: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 25px 0;
+  margin: 0;
+}
+
+.footer_section p a {
+  color: inherit;
+    color: #F1C40F;
+    text-decoration: none;
+}
+.navbar .dropdown-menu a {
+    color: #333333; /* Texto cinza escuro */
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.navbar .dropdown-menu a:hover {
+    background-color: #F1C40F; /* Amarelo WRI no hover */
+    color: white;
+}
+
+.dropdown-menu {
+    border-radius: 0.25rem; /* Borda arredondada */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+.features-table-container {
+    width: 100%;
+    overflow-x: auto; /* Garante que a tabela possa rolar horizontalmente em telas menores */
+}
+
+.features-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif; /* Fonte consistente com o navbar */
+    margin: 20px 0;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.features-table th, .features-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd; /* Bordas sutis */
+    text-align: left;
+}
+
+.features-table th {
+    background-color: rgba(51, 51, 51, 0.9); /* Cinza escuro translúcido */
+    color: #ffffff; /* Texto branco */
+    text-transform: uppercase; /* Texto em maiúsculas */
+    font-size: 14px;
+    padding: 12px 15px;
+    letter-spacing: 1px; /* Espaçamento entre letras */
+    border: 1px solid #ddd; /* Bordas para destacar as colunas */
+}
+
+.features-table td {
+    font-size: 14px;
+    color: #333333; /* Texto cinza escuro */
+}
+
+/* Linhas da tabela, mantendo a alternância de cores */
+.features-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Cor de fundo alternada */
+}
+
+/* Hover das linhas, semelhante ao efeito do navbar */
+.features-table tr:hover {
+    background-color: #f1c40f; /* Amarelo WRI no hover */
+    color: #333333; /* Cor do texto ao passar o mouse */
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    .features-table th, .features-table td {
+        padding: 10px 8px;
+    }
+}
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.messages {
+    list-style-type: none;  /* Remove o bullet */
+    padding-left: 0;  /* Remove o padding padrão à esquerda */
+}
+
+.messages li {
+    margin-bottom: 10px;  /* Espaçamento entre as mensagens */
+    padding: 10px;  /* Padding para deixar as mensagens mais legíveis */
+    border-radius: 5px;  /* Deixa as bordas arredondadas */
+}
+
+.expert_section {
+  background-color: #A82537;
+}
+
+.expert_section .box {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color:rgba(51, 51, 51, 0.9);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 45px;
+}
+
+.expert_section .box .img-box {
+  width: 100%;
+}
+
+.expert_section .box .img-box img {
+  width: 100%;
+}
+
+.expert_section .box .detail-box {
+  width: 100%;
+  color: #ffffff;
+  padding: 25px 15px;
+}
+
+.expert_section .box .detail-box a {
+  color: inherit;
+  font-size: 18px;
+}
+
+.expert_section .box .detail-box .expert_position {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+     -moz-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 10px 0;
+}
+
+.expert_section .box .detail-box .expert_rating {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.expert_section .box .detail-box p {
+  margin-bottom: 0;
+}
+
+.expert_section .btn-box {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 45px;
+}
+
+.expert_section .btn-box a {
+  display: inline-block;
+  padding: 10px 45px;
+  background-color: #e41a2b;
+  color: #ffffff;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  -o-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  border: 1px solid #e41a2b;
+  outline: none;
+}
+
+.expert_section .btn-box a:hover {
+  background-color: transparent;
+  color: #e41a2b;
+}
+
+    /* Seleciona o ícone do VLibras e ajusta a posição */
+    div[vw-access-button] {
+        position: fixed;
+        bottom: 30px; /* Altere este valor para ajustar o quanto quer mover para cima */
+        right: 20px;  /* A posição horizontal permanece inalterada */
+        z-index: 9999; /* Mantém o ícone visível acima de outros elementos */
+    }
+
+</style>
+
+
+</style>
+
+
+</head>
+
+<body>
+<div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+    </div>
+</div>
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    {% include 'paginas/navbar.html' %}
+          <section class="slider_section ">
+            <div class="container ">
+
+              <div class="row">
+                <div class="col-lg-7 col-md-8 mx-auto">
+                  <div class="detail-box">
+                  <img src="{% static 'images/poev.png' %}" alt="poev" width="100" height="100" class="d-inline-block align-middle">
+                  <br>
+                  <br>
+                    <h1>
+                      Portal de Oportunidades de Emprego de Vinhedo
+                    </h1>
+                    <p>
+                        Bem-vindo ao portal de oportunidades de emprego da região de Vinhedo para alunos da Universidade Virtual do Estado de São Paulo (UNIVESP) e comunidade.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+  </div>
+
+{% block conteudo %}
+{% endblock %}
+
+{% include 'paginas/footer.html' %}
+
+  <!-- jQery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- bootstrap js -->
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js" integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+  <!-- custom js -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
+
+<script>
+    (function(d){
+      var s = d.createElement("script");
+      /* uncomment the following line to override default position*/
+      /* s.setAttribute("data-position", 3);*/
+      /* uncomment the following line to override default size (values: small, large)*/
+      /* s.setAttribute("data-size", "small");*/
+      /* uncomment the following line to override default language (e.g., fr, de, es, he, nl, etc.)*/
+      /* s.setAttribute("data-language", "language");*/
+      /* uncomment the following line to override color set via widget (e.g., #053f67)*/
+      /* s.setAttribute("data-color", "#053e67");*/
+      /* uncomment the following line to override type set via widget (1=person, 2=chair, 3=eye, 4=text)*/
+      /* s.setAttribute("data-type", "1");*/
+      /* s.setAttribute("data-statement_text:", "Our Accessibility Statement");*/
+      /* s.setAttribute("data-statement_url", "http://www.example.com/accessibility")";*/
+      /* uncomment the following line to override support on mobile devices*/
+      /* s.setAttribute("data-mobile", true);*/
+      /* uncomment the following line to set custom trigger action for accessibility menu*/
+      /* s.setAttribute("data-trigger", "triggerId")*/
+      s.setAttribute("data-account", "OhZLm35TqZ");
+      s.setAttribute("src", "https://cdn.userway.org/widget.js");
+      (d.body || d.head).appendChild(s);
+    })(document)
+    </script>
+    <noscript>Please ensure Javascript is enabled for purposes of <a href="https://userway.org">website accessibility</a></noscript>
+
+
+
+</body>
+
+</html>
+
+
+

@@ -1,0 +1,88 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+        {% block conteudo %}
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+<div class="container">
+<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+<script src="{% static 'django_ckeditor_5/dist/ckeditor.js' %}"></script>
+<h2>Criar Nova Empresa</h2>
+
+        <!-- Formulário de Criação de Vaga -->
+<form method="post" id="empresa-form">
+            {% load crispy_forms_tags %}
+
+            {% csrf_token %}
+
+            <!-- Campo Descrição -->
+            <div class="form-group mb-3">
+                {{ form.cnpj|as_crispy_field }}
+            </div>
+
+            <!-- Campo Nome da Vaga -->
+            <div class="form-group mb-3">
+                {{ form.nome|as_crispy_field }}
+            </div>
+            <div class="container" style="text-align: center">
+            <button type="submit" style="width: auto; padding: 8px 16px; display: inline-block; text-align:center"class="btn btn-primary btn-block">Salvar Empresa</button>
+            </div>
+
+            <!-- Botão de Enviar -->
+        </form>
+    </div>
+
+      </div>
+    </div>
+  </section>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Seleciona os campos usando IDs padrão do crispy_forms
+    const cnpjField = document.getElementById("id_cnpj");
+    const nomeField = document.getElementById("id_nome");
+
+    if (cnpjField && nomeField) {
+        console.log("Campos encontrados, configurando evento...");
+
+        // Evento para quando o usuário sair do campo de CNPJ
+        cnpjField.addEventListener("blur", function() {
+            const cnpj = cnpjField.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            console.log("CNPJ inserido:", cnpj);
+
+            if (cnpj.length === 14) { // Verifica se o CNPJ tem 14 dígitos
+                console.log("CNPJ válido, iniciando requisição para a API...");
+
+                // Faz a requisição para a API Minha Receita
+                fetch(`https://minhareceita.org/${cnpj}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Erro na resposta da API");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Resposta da API:", data);
+                        // Preenche o campo Nome com a razão social
+                        if (data.razao_social) {
+                            nomeField.value = data.razao_social; // Preenche o campo Nome automaticamente
+                        } else {
+                            alert("CNPJ inválido ou razão social não encontrada.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro ao buscar dados do CNPJ:", error);
+                        alert("Erro ao buscar dados do CNPJ. Tente novamente.");
+                    });
+            } else {
+                alert("Insira um CNPJ válido com 14 dígitos.");
+            }
+        });
+    } else {
+        console.error("Campos não encontrados no formulário.");
+        alert("Erro ao configurar o formulário. Verifique os IDs dos campos.");
+    }
+});
+</script>
+        {% endblock %}
