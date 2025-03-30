@@ -130,6 +130,54 @@ class CriarVagaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # Passa `empresa_id` no contexto para verificar no template
         context['empresa_id'] = self.kwargs.get('empresa_id')
         return context
+    
+class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Vaga
+    form_class = VagaForm
+    template_name = 'cadastros/form_multiplas_vagas.html'
+    success_url = reverse_lazy('minhas_vagas')
+
+    def test_func(self):
+        # Somente usuários com perfil 'anunciante' podem acessar esta view
+        return hasattr(self.request.user, 'anuncianteprofile')
+
+    def get_initial(self):
+        # Passa a empresa específica ao formulário para pré-selecioná-la
+        initial = super().get_initial()
+        empresa_id = self.kwargs.get('empresa_id')
+        if empresa_id:
+            initial['empresa'] = empresa_id
+        return initial
+
+    def form_valid(self, form):
+        # Define o usuário que está criando a vaga
+        form.instance.usuario = self.request.user
+
+        # Se um `empresa_id` for passado, associa a empresa ao objeto de vaga
+        empresa_id = self.kwargs.get('empresa_id')
+        if empresa_id:
+            form.instance.empresa = get_object_or_404(Empresa, pk=empresa_id)
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        # Adiciona informações adicionais ao contexto do template
+        context = super().get_context_data(**kwargs)
+
+        # Define o tipo de usuário no contexto, se necessário
+        user_type = None
+        if self.request.user.is_authenticated:
+            if hasattr(self.request.user, 'alunoprofile'):
+                user_type = 'aluno'
+            elif hasattr(self.request.user, 'anuncianteprofile'):
+                user_type = 'anunciante'
+        context['user_type'] = user_type
+
+        # Passa `empresa_id` no contexto para verificar no template
+        context['empresa_id'] = self.kwargs.get('empresa_id')
+        return context
+
+
 ###############################################################################
 ###############################################################################
 ###############################################################################

@@ -4,7 +4,9 @@ from .views import *
 urlpatterns = [
 #    path('painel/', PainelAnuncianteView.as_view(), name='painel_anunciante'),
     path('criar-vaga/', CriarVagaView.as_view(), name='criar_vaga'),
+    path('criar-multiplas-vagas', CriarMultiplasVagasView.as_view(), name='criar_multiplas_vagas'),
     path('criar-vaga/<int:empresa_id>/', CriarVagaView.as_view(), name='criar_vaga_empresa'),  # Com empresa específica
+    path('criar-multiplas-vagas/<int:empresa_id>/', CriarMultiplasVagasView.as_view(), name='criar_multiplas_vagas_empresa'),
     path('criar-empresa/', CriarEmpresaView.as_view(), name='criar_empresa'),
 #    path('empresa/<int:pk>/vagas/', ListarVagasPorEmpresaView.as_view(), name='listar_vagas_empresa'),
     path('editar-vaga/<int:pk>/', EditarVagaView.as_view(), name='editar_vaga'),

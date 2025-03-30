@@ -1,1 +1,56 @@
-db.sqlite3
+# Arquivos do Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+*.DS_Store
+
+# Configurações locais e credenciais sensíveis
+.env
+*.sqlite3
+/db.sqlite3
+/secrets.json
+
+# Migrations que podem ser recriadas (opcional)
+**/migrations/*.py
+!**/migrations/__init__.py  # Exceção para manter os pacotes
+
+# Arquivos de log e temporários
+*.log
+*.out
+*.pid
+*.lock
+*.gz
+*.zip
+*.tar
+*.rar
+*.7z
+*.bak
+*.tmp
+*.swp
+
+# Diretórios de mídia e estáticos gerados
+/media/
+staticfiles/
+static/
+
+# Dependências do Virtualenv/Pyenv
+venv/
+.env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Configuração do VS Code e IDEs
+.vscode/
+.idea/
+*.iml
+
+# Arquivos de Docker e Build (se aplicável)
+__pycache__/
+*.egg-info/
+*.egg
+dist/
+build/

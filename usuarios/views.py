@@ -259,14 +259,37 @@ class RegistrarAlunoView(CreateView):
                 'user': user,
                 'activate_url': activate_url,
             })
-            send_mail(subject, message, 'poev@poev.com.br', [user.email])
+
+            config_loader = ConfigLoader()
+            email = config_loader.get("EMAIL")
+
+            send_mail(subject, message, email, [user.email])
 
             # Redireciona para a página de confirmação de envio de e-mail
             return redirect('email_verification_sent')
         else:
             return self.form_invalid(user_form)
 
+import json
+from pathlib import Path
 
+class ConfigLoader:
+    def __init__(self, config_path="/Users/joaocarlosmartinsdealmeida/Desktop/django/config.json"):
+        self.config_path = Path(config_path)
+        self.config = self._load_config()
+
+    def _load_config(self):
+        """Carrega o arquivo de configuração JSON."""
+        if not self.config_path.exists():
+            raise FileNotFoundError(f"Config file not found: {self.config_path}")
+
+        with open(self.config_path, "r", encoding="utf-8") as config_file:
+            return json.load(config_file)
+
+    def get(self, key, default=None):
+        """Retorna um valor do JSON, se existir."""
+        return self.config.get(key, default)
+    
 
 class RegistrarAnuncianteView(CreateView):
     model = User
@@ -310,7 +333,10 @@ class RegistrarAnuncianteView(CreateView):
                 'activate_url': activate_url,
             })
 
-            send_mail(subject, message, 'poev@poev.com.br', [user.email])
+            config_loader = ConfigLoader()
+            email = config_loader.get("EMAIL")
+
+            send_mail(subject, message, email, [user.email])
 
             # Redireciona para a página de confirmação de envio de e-mail
             return redirect('email_verification_sent')
