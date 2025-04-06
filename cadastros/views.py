@@ -130,52 +130,84 @@ class CriarVagaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # Passa `empresa_id` no contexto para verificar no template
         context['empresa_id'] = self.kwargs.get('empresa_id')
         return context
-    
-class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = Vaga
-    form_class = VagaForm
+
+
+from django.views import View
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from .models import Vaga, Empresa
+import pandas as pd
+
+class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'cadastros/form_multiplas_vagas.html'
-    success_url = reverse_lazy('minhas_vagas')
 
     def test_func(self):
-        # Somente usuários com perfil 'anunciante' podem acessar esta view
         return hasattr(self.request.user, 'anuncianteprofile')
 
-    def get_initial(self):
-        # Passa a empresa específica ao formulário para pré-selecioná-la
-        initial = super().get_initial()
-        empresa_id = self.kwargs.get('empresa_id')
-        if empresa_id:
-            initial['empresa'] = empresa_id
-        return initial
+    def get(self, request, empresa_id=None):
+        context = {
+            'empresa_id': empresa_id,
+            'user_type': 'anunciante' if hasattr(request.user, 'anuncianteprofile') else None,
+        }
+        return render(request, self.template_name, context)
 
-    def form_valid(self, form):
-        # Define o usuário que está criando a vaga
-        form.instance.usuario = self.request.user
+    def post(self, request, empresa_id=None):
+        arquivo = request.FILES.get('arquivo')
 
-        # Se um `empresa_id` for passado, associa a empresa ao objeto de vaga
-        empresa_id = self.kwargs.get('empresa_id')
-        if empresa_id:
-            form.instance.empresa = get_object_or_404(Empresa, pk=empresa_id)
+        if not arquivo or not arquivo.name.endswith('.xlsx'):
+            messages.error(request, "Por favor, envie um arquivo .xlsx válido e baseado no modelo de planilha.")
+            return redirect(request.path)
 
-        return super().form_valid(form)
+        try:
+            empresa = get_object_or_404(Empresa, pk=empresa_id) if empresa_id else None
 
-    def get_context_data(self, **kwargs):
-        # Adiciona informações adicionais ao contexto do template
-        context = super().get_context_data(**kwargs)
+            criadas_ativas = 0
+            criadas_inativas = 0
 
-        # Define o tipo de usuário no contexto, se necessário
-        user_type = None
-        if self.request.user.is_authenticated:
-            if hasattr(self.request.user, 'alunoprofile'):
-                user_type = 'aluno'
-            elif hasattr(self.request.user, 'anuncianteprofile'):
-                user_type = 'anunciante'
-        context['user_type'] = user_type
+            df = pd.read_excel(arquivo, sheet_name='Planilha1')
 
-        # Passa `empresa_id` no contexto para verificar no template
-        context['empresa_id'] = self.kwargs.get('empresa_id')
-        return context
+            if (pd.notna(df.iloc[4, 2])):
+                print(f'Empresa: {df.iloc[4, 2]}')
+
+            empresa = Empresa.objects.get(nome = df.iloc[4, 2])
+
+            vagas = []
+            linha_inicial_atual = 7
+            coluna_atual = 2
+
+            for i in range(1, 11):                
+                # Verifica se a vaga não foi preenchida
+                if not pd.notna(df.iloc[linha_inicial_atual, coluna_atual]):
+                    break
+
+                vaga = Vaga(
+                    nome = df.iloc[linha_inicial_atual, coluna_atual],
+                    descricao = df.iloc[linha_inicial_atual + 1, coluna_atual],
+                    empresa = empresa,
+                    link = df.iloc[linha_inicial_atual + 2, coluna_atual],
+                    inativa = False if df.iloc[linha_inicial_atual + 3, coluna_atual] == 'Ativa' else True,
+                    usuario = request.user,
+                )
+                vaga.save()
+
+                linha_inicial_atual += 6
+
+                if (vaga.inativa):
+                    criadas_inativas += 1
+                else:
+                    criadas_ativas += 1
+
+            for vaga in vagas:
+                print(vaga)
+
+            messages.success(request, f"A partir do upload da planilha preenchida, {criadas_ativas} vaga(s) ativa(s) e {criadas_inativas} vaga(s) inativa(s) foram criadas com sucesso.")
+            return redirect('criar_multiplas_vagas')
+
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro ao processar o arquivo: {e}")
+            return redirect(request.path)
+
 
 
 ###############################################################################

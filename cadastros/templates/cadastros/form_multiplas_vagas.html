@@ -11,8 +11,17 @@
                 <script src="{% static 'django_ckeditor_5/dist/ckeditor.js' %}"></script>
                 <h2>Criar Múltiplas Novas Vagas</h2>
                 {% load static %}
+
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3" role="alert">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+                
                 <!-- Formulário de Criação de Vaga -->
-                <form method="post" novalidate>
+                <form method="post" enctype="multipart/form-data" novalidate>
                     {% load crispy_forms_tags %}
 
                     {% csrf_token %}
