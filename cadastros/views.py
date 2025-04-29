@@ -74,7 +74,7 @@ class CriarEmpresaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from .models import Vaga, Empresa
+from .models import Vaga, Empresa, Curso
 from .forms import VagaForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -345,3 +345,153 @@ class VagaDetailView(DetailView):
         return context
 
 
+
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from .models import Empresa, Curso
+from .forms import CursoForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+class CriarCursoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Curso
+    form_class = CursoForm
+    template_name = 'cadastros/form_curso.html'
+    success_url = reverse_lazy('meus_cursos')
+
+    def test_func(self):
+        # Somente usuários com perfil 'anunciante' podem acessar esta view
+        return hasattr(self.request.user, 'anuncianteprofile')
+
+    def get_initial(self):
+        # Passa a empresa específica ao formulário para pré-selecioná-la
+        initial = super().get_initial()
+        empresa_id = self.kwargs.get('empresa_id')
+        if empresa_id:
+            initial['empresa'] = empresa_id
+        return initial
+
+    def form_valid(self, form):
+        # Define o usuário que está criando o curso
+        form.instance.usuario = self.request.user
+
+        # Se um `empresa_id` for passado, associa a empresa ao objeto de curso
+        empresa_id = self.kwargs.get('empresa_id')
+        if empresa_id:
+            form.instance.empresa = get_object_or_404(Empresa, pk=empresa_id)
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        # Adiciona informações adicionais ao contexto do template
+        context = super().get_context_data(**kwargs)
+
+        # Define o tipo de usuário no contexto, se necessário
+        user_type = None
+        if self.request.user.is_authenticated:
+            if hasattr(self.request.user, 'alunoprofile'):
+                user_type = 'aluno'
+            elif hasattr(self.request.user, 'anuncianteprofile'):
+                user_type = 'anunciante'
+        context['user_type'] = user_type
+
+        # Passa `empresa_id` no contexto para verificar no template
+        context['empresa_id'] = self.kwargs.get('empresa_id')
+        return context
+
+
+class EditarCursoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Curso
+    form_class = CursoForm
+    template_name = 'cadastros/form_curso.html'
+    success_url = reverse_lazy('meus_cursos')
+
+    def test_func(self):
+        # Verifica se o usuário é o criador do curso (ou pode ser feito com base no perfil de anunciante)
+        curso = self.get_object()
+        return curso.usuario == self.request.user or hasattr(self.request.user, 'anuncianteprofile')
+
+    def form_valid(self, form):
+        # Mantém o usuário que criou o curso inicialmente
+        form.instance.usuario = self.request.user
+        return super().form_valid(form)
+
+
+class ExcluirCursoView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Curso
+    template_name = 'cadastros/confirmar_exclusao_curso.html'
+    success_url = reverse_lazy('meus_cursos')
+
+    def test_func(self):
+        curso = self.get_object()
+        return curso.usuario == self.request.user
+
+
+from django.views.generic.detail import DetailView
+
+class CursoDetailView(DetailView):
+    model = Curso
+    template_name = 'cadastros/curso_detail.html'  # Template que exibe os detalhes do curso
+    context_object_name = 'curso'        # Nome da variável no template
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_type = None
+        if self.request.user.is_authenticated:
+            if hasattr(self.request.user, 'alunoprofile'):
+                user_type = 'aluno'
+            elif hasattr(self.request.user, 'anuncianteprofile'):
+                user_type = 'anunciante'
+
+        context['user_type'] = user_type
+        return context
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+class ListaTodosCursosView(ListView):
+    model = Curso
+    template_name = 'cadastros/lista_todos_cursos.html'
+    context_object_name = 'cursos'
+
+    def get_queryset(self):
+        # Retorna todas os cursos, apenas os que não estão inativos
+        return Curso.objects.filter(inativo=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_type = None
+        if self.request.user.is_authenticated:
+            if hasattr(self.request.user, 'alunoprofile'):
+                user_type = 'aluno'
+            elif hasattr(self.request.user, 'anuncianteprofile'):
+                user_type = 'anunciante'
+
+        context['user_type'] = user_type
+        return context
+
+
+class ListaCursosView(LoginRequiredMixin, ListView):
+    model = Curso
+    template_name = 'cadastros/meus_cursos.html'
+    context_object_name = 'cursos'
+
+    def get_queryset(self):
+        # Retorna apenas os cursos criados pelo usuário logado (anunciante)
+        return Curso.objects.filter(usuario=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_type = None
+        if self.request.user.is_authenticated:
+            if hasattr(self.request.user, 'alunoprofile'):
+                user_type = 'aluno'
+            elif hasattr(self.request.user, 'anuncianteprofile'):
+                user_type = 'anunciante'
+
+        context['user_type'] = user_type
+        return context

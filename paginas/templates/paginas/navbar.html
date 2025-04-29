@@ -34,6 +34,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'todas_vagas' %}">Vagas</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'todos_cursos' %}">Cursos/Formações</a>
+              </li>
 
 
 
@@ -58,13 +61,19 @@
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
     <a class="dropdown-item" href="{% url 'atualizar_perfil_empresa' %}"#1>Meu dados</a>
     <a class="dropdown-item" href="{% url 'password_change' %}"#1></i>Alterar senha</a>
+    <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="{% url 'todas_vagas' %}"#1></i>Vagas Abertas</a>
     <a class="dropdown-item" href="{% url 'minhas_vagas' %}"#1></i>Minhas Vagas</a>
     <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'todos_cursos' %}"#1></i>Ver Cursos/Formações Disponíveis</a>
+    <a class="dropdown-item" href="{% url 'meus_cursos' %}"#1></i>Meus Cursos</a>
+    <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="{% url 'criar_vaga' %}"#1></i>Criar Vaga</a>
     <a class="dropdown-item" href="{% url 'criar_multiplas_vagas' %}"#1></i>Criar Múltiplas Vagas</a>
-    <a class="dropdown-item" href="{% url 'criar_empresa' %}"#1></i>Criar Empresa</a>
     <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'criar_curso' %}"#1></i>Criar Curso</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'criar_empresa' %}"#1></i>Criar Empresa</a>
     <a class="dropdown-item" href="{% url 'listar_empresas' %}"#1></i>Ver Empresas</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="{% url 'logout' %}"></i>Sair</a>

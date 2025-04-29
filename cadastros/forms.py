@@ -1,10 +1,7 @@
 from django import forms
-from .models import Vaga, Empresa
-from django import forms
-from .models import Vaga, Empresa
+from .models import Vaga, Empresa, Curso
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.core.exceptions import ValidationError
-from .models import Empresa
 from .validators import validar_cnpj  # Importa o validador
 
 
@@ -97,3 +94,47 @@ class EmpresaForm(forms.ModelForm):
             raise ValidationError("Este CNPJ já está cadastrado. Por favor, insira um CNPJ diferente.")
         
         return cnpj
+
+
+class CursoForm(forms.ModelForm):
+    class Meta:
+        model = Curso
+        fields = ['nome', 'descricao', 'empresa', 'link', 'inativo']
+        widgets = {
+            'descricao': CKEditor5Widget(config_name='default'),  # Configura o CKEditor para o campo descrição
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Preenchendo o campo empresa com empresas já cadastradas
+        empresas = Empresa.objects.all()
+        empresa_choices = [(empresa.id, empresa.nome) for empresa in empresas]
+        empresa_choices.insert(0, ('', 'Selecione uma empresa'))
+        self.fields['empresa'].choices = empresa_choices
+
+        # Adicionando placeholders e removendo labels
+        self.fields['nome'].widget.attrs.update({'placeholder': 'Título do Curso'})
+        self.fields['empresa'].widget.attrs.update({'placeholder': 'Selecione uma empresa'})
+        self.fields['link'].widget.attrs.update({'placeholder': 'Link para o Curso'})
+
+        # Configurando o campo 'inativa' como uma escolha entre "Ativa" e "Inativa"
+        self.fields['inativo'] = forms.ChoiceField(
+            choices=[(False, 'Ativo'), (True, 'Inativo')],
+            widget=forms.Select(),
+            label='Status do Curso'
+        )
+
+        # Remover os labels
+        for field in self.fields:
+            self.fields[field].label = ''
+
+    def clean(self):
+        cleaned_data = super().clean()
+        empresa = cleaned_data.get('empresa')
+
+        # Verifica se uma empresa foi selecionada
+        if not empresa:
+            raise forms.ValidationError("Você deve selecionar uma empresa.")
+
+        return cleaned_data

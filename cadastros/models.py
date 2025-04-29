@@ -4,6 +4,7 @@ from usuarios.models import *
 from django_ckeditor_5.fields import CKEditor5Field
 from django.core.exceptions import ValidationError
 from .validators import validar_cnpj  # Importe a função de validação de CNPJ
+
 class Empresa(models.Model):
     cnpj = models.CharField(max_length=18, unique=True, verbose_name="CNPJ")
     nome = models.CharField(max_length=255, verbose_name="Nome da empresa")
@@ -27,3 +28,13 @@ class Vaga(models.Model):
     def __str__(self):
         return self.nome
 
+class Curso(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = CKEditor5Field('Text', config_name='extends')
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE)
+    link = models.URLField(blank=True)
+    inativo = models.BooleanField(default=False)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.nome

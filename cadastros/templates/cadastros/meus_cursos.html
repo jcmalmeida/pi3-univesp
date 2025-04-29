@@ -1,0 +1,56 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+
+        {% block conteudo %}
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+<div class="container">
+<h2>Meus Cursos e Formações</h2>
+
+<table class="features-table">
+    <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Link</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in cursos %}
+            <tr>
+                <td>{{ curso.nome }}</td>
+                <td>{{ curso.descricao|safe }}</td>
+                <td><a href="{{ curso.link }}" target="_blank">Ver</a></td>
+                <td>{{ curso.inativo|yesno:"Inativo,Ativo" }}</td>
+                <td>
+                    <a href="{% url 'editar_curso' curso.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{% url 'excluir_curso' curso.pk %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Você tem certeza que deseja excluir este curso?');">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Você ainda não cadastrou nenhum curso.</td>
+            </tr>
+            {% endfor %}
+    </tbody>
+</table>
+    </div>
+
+      </div>
+    </div>
+  </section>
+        {% endblock %}
+
+
+
+
+
+
+
