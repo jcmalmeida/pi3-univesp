@@ -34,9 +34,6 @@
                                 <a href="{% url 'curso_detail' curso.pk %}" class="text-decoration-none">{{ curso.nome }}</a>
                             </h5>
                             
-                            <!-- Nome do curso -->
-                            <p class="card-text text-muted">{{ curso.empresa.nome }}</p>
-                            
                             <!-- Botão para ver detalhes do curso, com estilo personalizado -->
                             <div class="mt-auto">
                                 <a href="{% url 'curso_detail' curso.pk %}" class="btn btn-block">Ver Detalhes</a>

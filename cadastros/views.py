@@ -349,7 +349,7 @@ class VagaDetailView(DetailView):
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from .models import Empresa, Curso
+from .models import Curso
 from .forms import CursoForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -366,19 +366,12 @@ class CriarCursoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def get_initial(self):
         # Passa a empresa específica ao formulário para pré-selecioná-la
         initial = super().get_initial()
-        empresa_id = self.kwargs.get('empresa_id')
-        if empresa_id:
-            initial['empresa'] = empresa_id
+        
         return initial
 
     def form_valid(self, form):
         # Define o usuário que está criando o curso
         form.instance.usuario = self.request.user
-
-        # Se um `empresa_id` for passado, associa a empresa ao objeto de curso
-        empresa_id = self.kwargs.get('empresa_id')
-        if empresa_id:
-            form.instance.empresa = get_object_or_404(Empresa, pk=empresa_id)
 
         return super().form_valid(form)
 
@@ -395,8 +388,6 @@ class CriarCursoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 user_type = 'anunciante'
         context['user_type'] = user_type
 
-        # Passa `empresa_id` no contexto para verificar no template
-        context['empresa_id'] = self.kwargs.get('empresa_id')
         return context
 
 

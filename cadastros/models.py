@@ -31,7 +31,6 @@ class Vaga(models.Model):
 class Curso(models.Model):
     nome = models.CharField(max_length=255)
     descricao = CKEditor5Field('Text', config_name='extends')
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE)
     link = models.URLField(blank=True)
     inativo = models.BooleanField(default=False)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
