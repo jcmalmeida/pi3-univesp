@@ -156,12 +156,10 @@ class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, View):
         arquivo = request.FILES.get('arquivo')
 
         if not arquivo or not arquivo.name.endswith('.xlsx'):
-            messages.error(request, "Por favor, envie um arquivo .xlsx válido e baseado no modelo de planilha.")
+            messages.error(request, "Por favor, envie um arquivo .xlsx válido e baseado no modelo de planilha de vaga.")
             return redirect(request.path)
 
         try:
-            empresa = get_object_or_404(Empresa, pk=empresa_id) if empresa_id else None
-
             criadas_ativas = 0
             criadas_inativas = 0
 
@@ -172,7 +170,6 @@ class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, View):
 
             empresa = Empresa.objects.get(nome = df.iloc[4, 2])
 
-            vagas = []
             linha_inicial_atual = 7
             coluna_atual = 2
 
@@ -197,9 +194,9 @@ class CriarMultiplasVagasView(LoginRequiredMixin, UserPassesTestMixin, View):
                     criadas_inativas += 1
                 else:
                     criadas_ativas += 1
-
-            for vaga in vagas:
-                print(vaga)
+            
+            if (criadas_ativas == 0 and criadas_inativas == 0):
+                raise Exception("Nenhuma vaga foi criada. Verifique o modelo de arquivo utilizado e tente novamente.")
 
             messages.success(request, f"A partir do upload da planilha preenchida, {criadas_ativas} vaga(s) ativa(s) e {criadas_inativas} vaga(s) inativa(s) foram criadas com sucesso.")
             return redirect('criar_multiplas_vagas')
@@ -389,6 +386,74 @@ class CriarCursoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         context['user_type'] = user_type
 
         return context
+
+
+from django.views import View
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from .models import Curso
+import pandas as pd
+
+class CriarMultiplosCursosView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'cadastros/form_multiplos_cursos.html'
+
+    def test_func(self):
+        return hasattr(self.request.user, 'anuncianteprofile')
+
+    def get(self, request, empresa_id=None):
+        context = {
+            'user_type': 'anunciante' if hasattr(request.user, 'anuncianteprofile') else None,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, empresa_id=None):
+        arquivo = request.FILES.get('arquivo')
+
+        if not arquivo or not arquivo.name.endswith('.xlsx'):
+            messages.error(request, "Por favor, envie um arquivo .xlsx válido e baseado no modelo de planilha de curso.")
+            return redirect(request.path)
+
+        try:
+            criados_ativos = 0
+            criados_inativos = 0
+
+            df = pd.read_excel(arquivo, sheet_name='Planilha1')
+
+            linha_inicial_atual = 5
+            coluna_atual = 2
+
+            for i in range(1, 11):                
+                # Verifica se o curso não foi preenchido
+                if not pd.notna(df.iloc[linha_inicial_atual, coluna_atual]):
+                    break
+
+                curso = Curso(
+                    nome = df.iloc[linha_inicial_atual, coluna_atual],
+                    descricao = df.iloc[linha_inicial_atual + 1, coluna_atual],
+                    link = df.iloc[linha_inicial_atual + 2, coluna_atual],
+                    inativo = False if df.iloc[linha_inicial_atual + 3, coluna_atual] == 'Ativo' else True,
+                    usuario = request.user,
+                )
+                
+                curso.save()
+
+                linha_inicial_atual += 6
+
+                if (curso.inativo):
+                    criados_inativos += 1
+                else:
+                    criados_ativos += 1
+
+            if (criados_ativos == 0 and criados_inativos == 0):
+                raise Exception("Nenhum curso foi criado. Verifique o modelo de arquivo utilizado e tente novamente.")
+
+            messages.success(request, f"A partir do upload da planilha preenchida, {criados_ativos} curso(s) ativo(s) e {criados_inativos} curso(s) inativo(s) foram criados com sucesso.")
+            return redirect('criar_multiplos_cursos')
+
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro ao processar o arquivo: {e}")
+            return redirect(request.path)
 
 
 class EditarCursoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

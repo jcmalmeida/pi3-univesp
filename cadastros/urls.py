@@ -39,6 +39,7 @@ urlpatterns = [
 #    path('empresa/<int:pk>/', EmpresaDetailView.as_view(), name='detalhe_empresa'),
 
     path('criar-curso/', CriarCursoView.as_view(), name='criar_curso'),
+    path('criar-multiplos-cursos', CriarMultiplosCursosView.as_view(), name='criar_multiplos_cursos'),
     path('editar-curso/<int:pk>/', EditarCursoView.as_view(), name='editar_curso'),
     path('excluir-curso/<int:pk>/', ExcluirCursoView.as_view(), name='excluir_curso'),
     path('curso/<int:pk>/', CursoDetailView.as_view(), name='curso_detail'),

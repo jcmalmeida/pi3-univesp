@@ -9,7 +9,7 @@
             <div class="container">
                 <link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
                 <script src="{% static 'django_ckeditor_5/dist/ckeditor.js' %}"></script>
-                <h2>Criar Múltiplas Novas Vagas</h2>
+                <h2>Criar Múltiplos Novos Cursos/Formações</h2>
                 {% load static %}
 
                 {% if messages %}
@@ -20,23 +20,23 @@
                   {% endfor %}
                 {% endif %}
                 
-                <!-- Formulário de Criação de Múltiplas Vagas -->
+                <!-- Formulário de Criação de Múltiplos Cursos -->
                 <form method="post" enctype="multipart/form-data" novalidate>
                     {% load crispy_forms_tags %}
 
                     {% csrf_token %}
                     <br>
                     <div class="mb-3">
-                        <label for="arquivo" class="form-label">Baixe o modelo de planilha para criação de múltiplas vagas (formato .xlsx):</label>
+                        <label for="arquivo" class="form-label">Baixe o modelo de planilha para criação de múltiplos cursos (formato .xlsx):</label>
                         <br>
-                        <a href="https://docs.google.com/spreadsheets/d/16_v1K5xrOgGepuUK7gbAqoiFOwpxVvS9/" target="_blank" download>
+                        <a href="https://docs.google.com/spreadsheets/d/1UvGdjLr8A9X_rtXPDdT6rhoCWDJB8Qnd/" target="_blank" download>
                             Baixar Planilha
                         </a>
                     </div>
 
                     <br>
                     <div class="mb-3">
-                        <label for="arquivo" class="form-label">Selecione a planilha de vagas *PREENCHIDA* (formato .xlsx):</label>
+                        <label for="arquivo" class="form-label">Selecione a planilha de cursos *PREENCHIDA*:</label>
                         <input type="file" class="form-control" id="arquivo" name="arquivo">
                     </div>
                     {{ form.media }} <!-- Importante: Carrega o JS e CSS do CKEditor -->
@@ -44,7 +44,7 @@
                     <div class="container" style="text-align: center">
                         <button type="submit"
                             style="width: auto; padding: 8px 16px; display: inline-block; text-align:center"
-                            class="btn btn-primary btn-block">Enviar planilha e salvar vagas</button>
+                            class="btn btn-primary btn-block">Enviar planilha e salvar cursos</button>
                     </div>
 
                     <!-- Botão de Enviar -->
