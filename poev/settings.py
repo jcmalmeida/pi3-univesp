@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_ckeditor_5',
-
+    # Envio de vagas e cursos por API
+    'rest_framework'
 ]
 
 #Constante para indicar o framework relacionado ao Crispy Forms
@@ -232,3 +233,11 @@ CKEDITOR_5_MAX_FILE_SIZE = 5  # Limita o tamanho de arquivos em MB
 CKEDITOR_5_ALLOW_ALL_FILE_TYPES = True  # Permite upload de qualquer tipo de arquivo
 CKEDITOR_5_UPLOAD_FILE_TYPES = ['jpeg', 'pdf', 'png']  # Tipos de arquivo permitidos para upload
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}

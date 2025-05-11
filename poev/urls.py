@@ -20,6 +20,12 @@ from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from cadastros.views import IncluirMultiplasVagasAPI, IncluirMultiplosCursosAPI
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('paginas.urls')),
@@ -30,6 +36,13 @@ urlpatterns = [
 #    path('ckeditor5/', include('django_ckeditor_5.urls')),
   # Inclua o caminho para as URLs do CKEditor 5
     path('ckeditor5/', include('django_ckeditor_5.urls')),  # Adicionado para o CKEditor 5
+
+    # Endpoints de autenticação JWT
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # Endpoints de criação de vagas e cursos
+    path('api/incluir-multiplas-vagas/', IncluirMultiplasVagasAPI.as_view(), name='incluir_multiplas_vagas'),
+    path('api/incluir-multiplos-cursos/', IncluirMultiplosCursosAPI.as_view(), name='incluir_multiplos_cursos'),
 ]
 ### Serve arquivos estáticos e de mídia durante o desenvolvimento
 if settings.DEBUG:
@@ -37,5 +50,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 else:
     urlpatterns += staticfiles_urlpatterns()
-
 
