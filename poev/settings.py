@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import json
 
-with open('/Users/joaocarlosmartinsdealmeida/Desktop/django/config.json') as config_file:
+with open('/etc/config.json') as config_file:
     config = json.load(config_file)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +29,7 @@ SECRET_KEY = config['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'poev.com.br',
+ALLOWED_HOSTS = ['poev.com.br',
                  'www.poev.com.br']
 
 
@@ -241,3 +241,4 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
